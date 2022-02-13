@@ -2,14 +2,17 @@
 from . import tools
 from ..classes import Exceptions
 
+# Functions
+def checkArg(arg, line, scope, highlight):
+    if arg["type"] == "null" and not tools.isValidName(arg["raw"]):
+        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid")
+
 # Operators
 def oAdd(inpr, args, line, scope):
     if len(args) < 2:
         raise Exceptions.InvalidSyntaxException("Operator \"add\" requires two arguments", line = line, file = scope.file, highlight = "add")
-    if args[0]["type"] == "null" and not tools.isValidName(args[0]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[0]["raw"])
-    if args[1]["type"] == "null" and not tools.isValidName(args[1]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[1]["raw"])
+    checkArg(args[0], line, scope, args[0]["raw"])
+    checkArg(args[1], line, scope, args[1]["raw"])
     if args[0]["type"] == args[1]["type"] == "number":
         return str(tools.parseNumber(float(args[0]["value"]) + float(args[1]["value"])))
     elif args[0]["type"] == "string" or args[1]["type"] == "string":
@@ -20,10 +23,8 @@ def oAdd(inpr, args, line, scope):
 def oCmp(inpr, args, line, scope):
     if len(args) < 3:
         raise Exceptions.InvalidSyntaxException("Operator \"cmp\" requires three arguments", line = line, file = scope.file, highlight = "if")
-    if args[0]["type"] == "null" and not tools.isValidName(args[0]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[0]["raw"])
-    if args[2]["type"] == "null" and not tools.isValidName(args[2]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[2]["raw"])
+    checkArg(args[0], line, scope, args[0]["raw"])
+    checkArg(args[2], line, scope, args[2]["raw"])
     switcher = {
         "==": lambda a, b: a["value"] == b["value"],
         "!=": lambda a, b: a["value"] != b["value"],
@@ -43,10 +44,8 @@ def oCmp(inpr, args, line, scope):
 def oDiv(inpr, args, line, scope):
     if len(args) < 2:
         raise Exceptions.InvalidSyntaxException("Operator \"add\" requires two arguments", line = line, file = scope.file, highlight = "add")
-    if args[0]["type"] == "null" and not tools.isValidName(args[0]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[0]["raw"])
-    if args[1]["type"] == "null" and not tools.isValidName(args[1]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[1]["raw"])
+    checkArg(args[0], line, scope, args[0]["raw"])
+    checkArg(args[1], line, scope, args[1]["raw"])
     if args[0]["type"] == args[1]["type"] == "number":
         return str(tools.parseNumber(float(args[0]["value"]) / float(args[1]["value"])))
     else:
@@ -55,8 +54,7 @@ def oDiv(inpr, args, line, scope):
 def oEnd(inpr, args, line, scope):
     inpr.scope = inpr.stack.pop()
     if args:
-        if args[0]["type"] == "null" and not tools.isValidName(args[0]["raw"]):
-            raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[0]["raw"])
+        checkArg(args[0], line, scope, args[0]["raw"])
         return args[0]["value"]
 
 def oIf(impr, args, line, scope):
@@ -68,8 +66,7 @@ def oIf(impr, args, line, scope):
 def oInp(inpr, args, line, scope):
     prompt = ""
     if args:
-        if args[0]["type"] == "null" and not tools.isValidName(args[0]["raw"]):
-            raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[0]["raw"])
+        checkArg(args[0], line, scope, args[0]["raw"])
         prompt = args[0]["value"]
     value = input(prompt)
     return f"\"{value}\""
@@ -88,8 +85,7 @@ def oJmp(inpr, args, line, scope):
     for i in range(len(parameters)):
         if not tools.isValidName(parameters[i]):
             raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = section["value"][0], file = scope.file, highlight = parameters[i])
-        if args[i + 1]["type"] == "null" and not tools.isValidName(args[i + 1]["raw"]):
-            raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[i + 1]["raw"])
+        checkArg(args[i + 1], line, scope, args[i + 1]["raw"])
         scope.vSet(parameters[i], args[i + 1]["value"])
     inpr.loop(section["value"][1:-1], scope)
     end = section["value"][-1]
@@ -99,10 +95,8 @@ def oJmp(inpr, args, line, scope):
 def oMul(inpr, args, line, scope):
     if len(args) < 2:
         raise Exceptions.InvalidSyntaxException("Operator \"add\" requires two arguments", line = line, file = scope.file, highlight = "add")
-    if args[0]["type"] == "null" and not tools.isValidName(args[0]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[0]["raw"])
-    if args[1]["type"] == "null" and not tools.isValidName(args[1]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[1]["raw"])
+    checkArg(args[0], line, scope, args[0]["raw"])
+    checkArg(args[1], line, scope, args[1]["raw"])
     if args[0]["type"] == args[1]["type"] == "number":
         return str(tools.parseNumber(args[0]["value"]) * tools.parseNumber(args[1]["value"]))
     elif args[0]["type"] == "string" and args[1]["type"] == "number":
@@ -128,19 +122,16 @@ def oPrt(inpr, args, line, scope):
             parsed.append(f"\033[96m[section {name}]\033[0m" if fancy else f"[class {name}]")
         elif arg["type"] == "class":
             parsed.append(f"\033[96m[class {value.__name__}]\033[0m" if fancy else f"[class {value.__name__}]")
-        elif not tools.isValidName(args[0]["raw"]):
-            raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = arg["raw"])
         elif arg["type"] == "null":
+            checkArg(args[0], line, scope, args[0]["raw"])
             parsed.append(f"\033[33mnull\033[0m" if fancy else "null")
     print(*parsed)
 
 def oSub(inpr, args, line, scope):
     if len(args) < 2:
         raise Exceptions.InvalidSyntaxException("Operator \"add\" requires two arguments", line = line, file = scope.file, highlight = "add")
-    if args[0]["type"] == "null" and not tools.isValidName(args[0]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[0]["raw"])
-    if args[1]["type"] == "null" and not tools.isValidName(args[1]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[1]["raw"])
+    checkArg(args[0], line, scope, args[0]["raw"])
+    checkArg(args[1], line, scope, args[1]["raw"])
     if args[0]["type"] == args[1]["type"] == "number":
         return str(tools.parseNumber(float(args[0]["value"]) - float(args[1]["value"])))
     else:
@@ -149,8 +140,7 @@ def oSub(inpr, args, line, scope):
 def oVar(inpr, args, line, scope):
     if not args:
         raise Exceptions.InvalidSyntaxException("Operator \"var\" requires one or more arguments", line = line, file = scope.file, highlight = "var")
-    if not tools.isValidName(args[0]["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = args[0]["raw"])
+    checkArg(args[0], line, scope, args[0]["raw"])
     if len(args) == 1:
         return args[0]["value"]
     if scope.vHas(args[1]["raw"]):
