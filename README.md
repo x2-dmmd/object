@@ -1,7 +1,5 @@
-# x2 but oop
+# x2
 
-## About
+## Table of Contents
 
-imagine needing an about
-
-will migrate to x2 later i hope
+### test

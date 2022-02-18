@@ -3,9 +3,9 @@ from . import tools
 from ..classes import Exceptions
 
 # Functions
-def checkArg(arg, line, scope, highlight):
-    if arg["type"] == "null" and not tools.isValidName(arg["raw"]):
-        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid")
+def checkArg(arg, line, scope, highlight, function = None):
+    if function() if function else arg["type"] == "null" and not tools.isValidName(arg["raw"]):
+        raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = line, file = scope.file, highlight = highlight)
 
 # Operators
 def oAdd(inpr, args, line, scope):
@@ -83,14 +83,10 @@ def oJmp(inpr, args, line, scope):
     if len(args) - 1 < len(parameters):
         raise Exceptions.InvalidSyntaxException(f"Section expects {len(parameters)} parameters, got {len(args) - 1} instead", line = line, file = scope.file)
     for i in range(len(parameters)):
-        if not tools.isValidName(parameters[i]):
-            raise Exceptions.InvalidSyntaxException("Variable name contains illegal characters or is invalid", line = section["value"][0], file = scope.file, highlight = parameters[i])
+        checkArg(None, line, scope, parameters[i], lambda: not tools.isValidName(parameters[i]))
         checkArg(args[i + 1], line, scope, args[i + 1]["raw"])
-        scope.vSet(parameters[i], args[i + 1]["value"])
-    inpr.loop(section["value"][1:-1], scope)
-    end = section["value"][-1]
-    if end.startswith("end"):
-        return inpr.execute(end, inpr.scope)
+        inpr.scope.vSet(parameters[i], args[i + 1]["raw"])
+    inpr.loop(section["value"][1:], inpr.scope)
 
 def oMul(inpr, args, line, scope):
     if len(args) < 2:
@@ -106,6 +102,7 @@ def oMul(inpr, args, line, scope):
 
 def oPrt(inpr, args, line, scope):
     parsed, fancy = [], inpr.config.get("fancy")
+    print(args)
     for arg in args:
         value = arg["value"]
         if not arg["raw"]:
@@ -123,7 +120,7 @@ def oPrt(inpr, args, line, scope):
         elif arg["type"] == "class":
             parsed.append(f"\033[96m[class {value.__name__}]\033[0m" if fancy else f"[class {value.__name__}]")
         elif arg["type"] == "null":
-            checkArg(args[0], line, scope, args[0]["raw"])
+            checkArg(arg, line, scope, arg["raw"])
             parsed.append(f"\033[33mnull\033[0m" if fancy else "null")
     print(*parsed)
 
@@ -142,11 +139,8 @@ def oVar(inpr, args, line, scope):
         raise Exceptions.InvalidSyntaxException("Operator \"var\" requires one or more arguments", line = line, file = scope.file, highlight = "var")
     checkArg(args[0], line, scope, args[0]["raw"])
     if len(args) == 1:
-        return args[0]["value"]
-    if scope.vHas(args[1]["raw"]):
-        scope.vSet(args[0]["raw"], args[1]["value"], section = args[1]["section"], scope = scope)
-    else:
-        scope.vSet(args[0]["raw"], args[1]["raw"], scope = scope)
+        return inpr.scope.vGet(args[0]["raw"])
+    inpr.scope.vSet(args[0]["raw"], inpr.scope.vGet(args[1]["raw"], args[1]["value"]))
     return args[0]["raw"]
 
 # Exports

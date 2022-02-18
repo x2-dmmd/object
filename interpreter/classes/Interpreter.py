@@ -158,6 +158,7 @@ class Interpreter(Scope):
                 segments = []
         if mode:
             raise Exceptions.InvalidSyntaxException("Unclosed wrapper", line = line, file = scope.file, highlight = " ".join(segments))
+        print(arguments)
         return [ operator, arguments ]
     
     def parseLines(self, code):
