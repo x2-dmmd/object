@@ -1,0 +1,14 @@
+=== Objective x2 ===
+Usage:
+  obx2 [file]
+    Executes a file
+  obxt [options]
+    Runs a command
+
+Options:
+  -h, --help
+    Displays this help menu
+  -i, --installation
+    Prints installation directory
+  -v, --ver, --version
+    Pritns interpreter version
