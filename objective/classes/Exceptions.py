@@ -1,52 +1,51 @@
-# Class
+# Classes
 class InterpreterException(Exception):
-    def __init__(self, message: str, **kwargs) -> None:
+    def __init__(self, message: str, fields: dict = {}, **kwargs) -> None:
         super().__init__(message)
-        self.data = kwargs
         self.message = message
-        self.type = self.__class__.__name__
-    
+        self.fields = {**fields, **kwargs}
+
     def __repr__(self) -> str:
-        string = f"{self.type}: {self.message}"
-        for key, value in self.data.items():
-            string += f"\n\t{key}: {value}"
-        return string
+        exception = f"{self.__class__.__name__}: {self.message}"
+        for field in self.fields.items():
+            exception += f"\n  At {field[0]}: {field[1]}"
+        return exception
 
-class ArgumentMissing(InterpreterException):
+class ArgumentInvalid(InterpreterException):
     pass
 
-class ArgumentType(InterpreterException):
+class CommandInvalid(InterpreterException):
     pass
 
-class BadFlag(InterpreterException):
+class CommandNotFound(InterpreterException):
     pass
 
-class BadOption(InterpreterException):
+class ConstantDelete(InterpreterException):
     pass
 
-class BadToken(InterpreterException):
+class ConstantSet(InterpreterException):
     pass
 
-class BranchOverflow(InterpreterException):
+class FunctionOperatorBreak(InterpreterException):
     pass
 
-class ConstantAssignment(InterpreterException):
+class ModuleOperatorBreak(InterpreterException):
     pass
 
-class FieldOverflow(InterpreterException):
-    pass
-
-class FieldUnderflow(InterpreterException):
-    pass
-
-class ModuleConflict(InterpreterException):
+class ModuleOperatorReturn(InterpreterException):
     pass
 
 class ModuleNotFound(InterpreterException):
     pass
 
-class ModuleReturn(InterpreterException):
+class OperatorNotFound(InterpreterException):
     pass
 
-class OperatorNotFound(InterpreterException):
+class SectionOverflow(InterpreterException):
+    pass
+
+class SectionUnderflow(InterpreterException):
+    pass
+
+class TokenInvalid(InterpreterException):
     pass

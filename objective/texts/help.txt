@@ -1,35 +1,98 @@
-=== Objective x2 @ DmmD (2022) ===
+=== [ Objective x2 Help Menu ] ===
 Usage:
-  obx2 [file] [...flags]
-    Executes a file
-  obx2 [...options]
-    Runs a command
+
+  obx2
+    Launches an Objective x2 environment [NOT YET IMPLEMENTED]
+
+  obx2 [options]
+    Executes an Objective x2 option
+
+  obx2 <file> [flags]
+    Executes an Objective x2 file
+
 
 Flags:
-  -f, --fancy
-    Enables color printing
-    Alias (.xtconfig): "fancy": true
-  
-  -nf, --nofancy
-    Disables color printing
-    Alias (.xtconfig): "fancy": false
 
-  -nq, --noquiet
-    Disables quiet mode
-    Alias (.xtconfig): "quiet": false
+  -d, --debug
+    Enables debug mode
+
+    {
+      "debug": true
+    }
+
+  -D, --DEBUG
+    Disables debug mode
+
+    {
+      "debug": false
+    }
+  
+  -f, --fancy
+    Enables fancy print
+
+    {
+      "fancy": true
+    }
+
+  -F, --fancy
+    Disables fancy print
+
+    {
+      "fancy": false
+    }
+
+  -iip, --ignoreinterpreter, --ignoreinterpreterexceptions
+    Disables monitorization for interpreter exceptions
+
+    {
+      "ignoreInterpreterExceptions": true
+    }
+
+  -IIP, --IGNOREINTERPRETER, --IGNOREINTERPRETER
+    Enables monitorization for interpreter exceptions
+
+    {
+      "ignoreInterpreterExceptions": false
+    }
+
+  -ipy, --ignorepython, --ignorepythonexceptions
+    Disables monitorization for python exceptions
+
+    {
+      "ignorePythonExceptions": true
+    }
+
+  -IPY, --IGNOREPYTHON, --IGNOREPYTHONEXCEPTIONS
+    Enables monitorization for python exceptions
+
+    {
+      "ignorePythonExceptions": false
+    }
 
   -q, --quiet
-    Enables quiet mode - Throws error silently
-    Alias (.xtconfig): "quiet": true
+    Enables quiet mode
 
+    {
+      "quiet": true
+    }
+
+  -Q, --QUIET
+    Disables quiet mode
+    
+    {
+      "quiet": false
+    }
+  
 Options:
+
   -h, --help
-    Displays the help menu
+    Prints out the help menu
+
     -l, --long
-      Displays the advanced help menu
+      Prints out the advanced help menu
 
-  -i, --installation
-    Prints installation directory
-
+  -p, --path
+    Prints out the installation path of the interpreter
+  
   -v, --ver, --version
-    Prints interpreter version
+    Prints out the version of the interpreter
