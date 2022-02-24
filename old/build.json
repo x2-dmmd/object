@@ -1,0 +1,17 @@
+{
+    "contributors": [
+        {
+            "name": "DmmD",
+            "role": "Author"
+        },
+        {
+            "name": "iiPython",
+            "role": "Contributor"
+        }
+    ],
+    "description": "Objective x2 is an object-oriented extension based on x2 with more human-friendly syntaxes",
+    "github": "https://github.com/x2-dmmd/object.git",
+    "license": "MIT",
+    "name": "Objective x2",
+    "version": "v1.0.0"
+}

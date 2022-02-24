@@ -1,0 +1,5 @@
+sect test
+    prt test
+end
+
+jmp test

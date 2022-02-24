@@ -1,0 +1,55 @@
+=== Objective x2 @ DmmD (2022) ===
+Usage:
+  obx2 [file] [...flags]
+    Executes a file
+  obx2 [...options]
+    Runs a command
+
+Flags:
+  -f, --fancy
+    Enables color printing
+    Alias (.xtconfig): "fancy": true
+  
+  -iobx2, --ignoreObjective
+    Ignores Objective x2 exceptions
+    Alias (.xtconfig): "ignoreObjectiveException": true
+  
+  -ipy, --ignorepython
+    Ignores Python exceptions
+    Alias (.xtconfig): "ignorePythonException": true
+
+  -nf, --nofancy
+    Disables color printing
+    Alias (.xtconfig): "fancy": false
+
+  -nf, --nofancy
+    Disables color printing
+    Alias (.xtconfig): "fancy": false
+  
+  -niobx2, --nignoreObjective
+    Watches Objective x2 exceptions
+    Alias (.xtconfig): "ignoreObjectiveException": false
+  
+  -nipy, --nignorepython
+    Watches Python exceptions
+    Alias (.xtconfig): "ignorePythonException": false
+
+  -nq, --noquiet
+    Disables quiet mode
+    Alias (.xtconfig): "quiet": false
+
+  -q, --quiet
+    Enables quiet mode - Throws error silently
+    Alias (.xtconfig): "quiet": true
+
+Options:
+  -h, --help
+    Displays the help menu
+    -l, --long
+      Displays the advanced help menu
+
+  -i, --installation
+    Prints installation directory
+
+  -v, --ver, --version
+    Prints interpreter version
